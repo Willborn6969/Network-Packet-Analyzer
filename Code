@@ -1,0 +1,23 @@
+from scapy.all import sniff, IP, TCP, UDP, ICMP
+
+# Define the packet callback function
+def packet_callback(packet):
+    if IP in packet:
+        ip_src = packet[IP].src
+        ip_dst = packet[IP].dst
+        protocol = packet[IP].proto
+
+        # Map protocol numbers to names
+        if protocol == 6:
+            protocol_name = "TCP"
+        elif protocol == 17:
+            protocol_name = "UDP"
+        elif protocol == 1:
+            protocol_name = "ICMP"
+        else:
+            protocol_name = str(protocol)
+
+        print(f"Source: {ip_src}, Destination: {ip_dst}, Protocol: {protocol_name}")
+
+# Start sniffing packets
+sniff(prn=packet_callback, store=0)
